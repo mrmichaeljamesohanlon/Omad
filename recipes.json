@@ -1,26 +1,12 @@
 {
   "schemaVersion": 1,
   "currency": "GBP",
+  "dailyTargets": {"proteinG": 80, "fibreG": 30},
   "recipes": [
-    {
-      "id": "salmon-tuna-pasta",
-      "name": "Salmon and tuna pasta",
-      "status": "draft",
-      "dietary": ["pescatarian"],
-      "season": ["all-year"],
-      "tags": ["budget", "pasta"],
-      "costGBP": null,
-      "nutritionPerMeal": {
-        "caloriesKcal": null,
-        "proteinG": null,
-        "fibreG": null,
-        "dailyNutritionPct": null
-      },
-      "ingredients": [],
-      "method": [],
-      "notes": [
-        "Starter entry; add quantities, method, cost and nutrition estimates."
-      ]
-    }
+    {"id":"salmon-tuna-pasta","name":"Salmon and tuna pasta","description":"A filling fish pasta with onion and peas. No capers or mushrooms.","categories":["dinner"],"special":true,"dietary":["pescatarian"],"seasons":["all-year"],"seasonalProduce":[],"tags":["budget","pasta","fish","onion"],"costGBP":1.85,"nutritionPerServing":{"caloriesKcal":745,"proteinG":58,"fibreG":12},"ingredients":[{"amount":"100 g","name":"dried pasta"},{"amount":"80 g","name":"tinned salmon, drained"},{"amount":"80 g","name":"tinned tuna, drained"},{"amount":"80 g","name":"frozen peas"},{"amount":"½","name":"onion, chopped"},{"amount":"100 g","name":"passata"},{"amount":"1 tsp","name":"oil"},{"amount":"to taste","name":"black pepper"}],"method":["Boil the pasta until tender. Add the peas for the final 3 minutes, then drain.","Soften the onion in the oil in a pan. Stir in the passata, salmon and tuna and heat through.","Fold in the pasta and peas. Season with black pepper and serve."],"estimateNote":"Price and nutrition are rough per-meal estimates; check your own tin and packet labels."},
+    {"id":"chickpea-spinach-fritters","name":"Chickpea and spinach fritters","description":"Crisp-edged, filling fritters made without eggs or protein powder.","categories":["lunch","snacks"],"special":false,"dietary":["vegan","vegetarian"],"seasons":["all-year"],"seasonalProduce":[],"tags":["budget","chickpeas","spinach","vegan"],"costGBP":0.65,"nutritionPerServing":{"caloriesKcal":460,"proteinG":19,"fibreG":14},"ingredients":[{"amount":"150 g","name":"tinned chickpeas, drained"},{"amount":"35 g","name":"plain flour"},{"amount":"50 g","name":"onion, finely chopped"},{"amount":"50 g","name":"frozen spinach, thawed and squeezed"},{"amount":"½ tsp","name":"curry powder"},{"amount":"1 tbsp","name":"water, as needed"},{"amount":"1 tsp","name":"oil for the pan"}],"method":["Roughly mash the chickpeas with a fork, leaving some texture.","Mix in the flour, onion, spinach and curry powder. Add a little water until the mixture just holds together.","Shape into 3 or 4 small patties. Pan-fry in a little oil for 3 to 4 minutes per side, until hot and browned."],"estimateNote":"Price and nutrition are rough estimates; the amount of oil used changes the totals."},
+    {"id":"mung-bean-cottage-cheese-bake","name":"Mung bean and cottage cheese bake","description":"A simple, hearty bake using a full portion of cottage cheese, with no egg.","categories":["lunch","dinner"],"special":true,"dietary":["vegetarian"],"seasons":["all-year"],"seasonalProduce":[],"tags":["budget","mung beans","cottage cheese","spinach"],"costGBP":1.35,"nutritionPerServing":{"caloriesKcal":625,"proteinG":49,"fibreG":20},"ingredients":[{"amount":"100 g dry, or about 250 g cooked","name":"mung beans"},{"amount":"200 g","name":"cottage cheese"},{"amount":"100 g","name":"passata"},{"amount":"½","name":"onion, chopped"},{"amount":"60 g","name":"frozen spinach, thawed and squeezed"},{"amount":"½ tsp","name":"mixed herbs or curry powder"},{"amount":"to taste","name":"black pepper"}],"method":["If using dry mung beans, rinse and cook until soft, then drain well. Use cooked beans for a quicker bake.","Mix the beans with the cottage cheese, passata, onion, spinach and seasoning in an oven-safe dish.","Bake at 190°C for 25 to 30 minutes, until hot through and lightly browned on top."],"estimateNote":"Price and nutrition are rough estimates and depend on the cottage cheese brand."},
+    {"id":"corned-beef-hash","name":"Corned beef hash with peas","description":"A cheap, filling pan hash using potatoes, onion and frozen peas.","categories":["dinner"],"special":false,"dietary":["omnivore"],"seasons":["all-year"],"seasonalProduce":[],"tags":["budget","potato","corned beef","peas"],"costGBP":1.35,"nutritionPerServing":{"caloriesKcal":690,"proteinG":33,"fibreG":11},"ingredients":[{"amount":"300 g","name":"potatoes, diced"},{"amount":"150 g","name":"corned beef, chopped"},{"amount":"½","name":"onion, chopped"},{"amount":"80 g","name":"frozen peas"},{"amount":"1 tsp","name":"oil"},{"amount":"to taste","name":"black pepper"}],"method":["Boil or microwave the diced potatoes until just tender, then drain.","Soften the onion in the oil in a frying pan. Add the potatoes and let the edges brown.","Stir in the corned beef and peas. Cook until everything is piping hot, then season with black pepper."],"estimateNote":"Price and nutrition are rough estimates; corned beef brands vary in fat and salt."},
+    {"id":"apple-oat-bakes","name":"Apple and oat bakes","description":"Three small apple oat cakes made with one whole egg.","categories":["breakfast","snacks"],"special":false,"dietary":["vegetarian"],"seasons":["autumn","winter"],"seasonalProduce":["UK apples"],"tags":["budget","apple","oats","baking"],"costGBP":0.60,"nutritionPerServing":{"caloriesKcal":500,"proteinG":22,"fibreG":10},"ingredients":[{"amount":"80 g","name":"oats"},{"amount":"1","name":"apple, grated"},{"amount":"1 whole","name":"egg"},{"amount":"30 g","name":"plain flour"},{"amount":"50 ml","name":"milk"},{"amount":"½ tsp","name":"baking powder"},{"amount":"½ tsp","name":"cinnamon"}],"method":["Heat the oven to 180°C. Mix the oats, flour, baking powder and cinnamon.","Stir in the grated apple, whole egg and milk until combined.","Divide between 3 small greased muffin cups. Bake for 18 to 22 minutes until set."],"estimateNote":"Nutrition is for all 3 small bakes together; prices and values are rough estimates."}
   ]
 }
