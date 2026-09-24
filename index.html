@@ -123,7 +123,7 @@ function render(){
 }
 document.querySelectorAll("[data-category]").forEach(function(button){button.addEventListener("click",function(){state.category=button.dataset.category;document.querySelectorAll("[data-category]").forEach(function(item){item.setAttribute("aria-pressed",String(item===button));});render();});});
 ["#search","#diet","#sort","#seasonal"].forEach(function(selector){$(selector).addEventListener("input",render);});
-fetch("./recipes.json?v=205").then(function(response){if(!response.ok)throw new Error("recipes.json did not load");return response.json();}).then(function(data){state.recipes=Array.isArray(data.recipes)?data.recipes:[];state.targets=Object.assign({},state.targets,data.dailyTargets||{});state.referenceIntakes=Object.assign({},data.dailyReferenceIntakes||{});render();}).catch(function(){$("#recipes").innerHTML='<div class="load-error">Could not load recipes.json. Serve this folder through a local web server, or check that the JSON file is beside index.html.</div>';});
+fetch("./recipes-v2.json").then(function(response){if(!response.ok)throw new Error("recipes.json did not load");return response.json();}).then(function(data){state.recipes=Array.isArray(data.recipes)?data.recipes:[];state.targets=Object.assign({},state.targets,data.dailyTargets||{});state.referenceIntakes=Object.assign({},data.dailyReferenceIntakes||{});render();}).catch(function(){$("#recipes").innerHTML='<div class="load-error">Could not load recipes.json. Serve this folder through a local web server, or check that the JSON file is beside index.html.</div>';});
 </script>
 </body>
 </html>
