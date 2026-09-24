@@ -13,11 +13,13 @@ main{padding:32px 0 56px}.section-head{display:flex;justify-content:space-betwee
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.recipe{display:flex;flex-direction:column;min-width:0;padding:22px;border:1px solid var(--line);border-radius:22px;background:var(--card);box-shadow:0 4px 20px rgba(25,55,44,.035)}.recipe-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.badges{display:flex;flex-wrap:wrap;gap:6px}.badge{padding:5px 9px;border-radius:999px;color:var(--green);background:#edf3dc;font-size:.72rem;font-weight:750}.badge.special{color:#824129;background:#fbe9df}.recipe h3{margin:14px 0 7px;font-size:1.28rem;line-height:1.18;letter-spacing:-.025em}.recipe p{margin:0;color:var(--muted);line-height:1.5}.cost{flex:0 0 auto;color:var(--green);font-weight:850;font-size:1.25rem;white-space:nowrap}.cost small{display:block;color:var(--muted);font-size:.68rem;font-weight:600;text-align:right}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0 12px}.metric{padding:10px;border-radius:12px;background:#f4f5ed}.metric strong{display:block;font-size:1.04rem}.metric span{color:var(--muted);font-size:.72rem}.coverage{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:4px 0 14px}.coverage-row{display:grid;gap:5px;color:var(--muted);font-size:.75rem}.bar{height:6px;overflow:hidden;border-radius:99px;background:#e8eadf}.bar i{display:block;height:100%;border-radius:inherit;background:var(--green)}details{margin-top:auto;padding-top:8px;border-top:1px solid var(--line)}summary{padding:8px 0 0;color:var(--green);font-weight:750;cursor:pointer}.detail-content{padding-top:12px}.detail-content h4{margin:14px 0 6px;font-size:.86rem}.detail-content ul,.detail-content ol{margin:0;padding-left:20px;color:#485c51;font-size:.88rem;line-height:1.55}.detail-content li+li{margin-top:3px}.estimate{margin-top:12px!important;font-size:.76rem}.empty,.load-error{grid-column:1/-1;padding:38px 20px;border:1px dashed #b9c4b7;border-radius:18px;color:var(--muted);text-align:center}.footer{display:flex;justify-content:space-between;gap:18px;padding:18px 0 28px;border-top:1px solid var(--line);color:var(--muted);font-size:.78rem;line-height:1.5}.footer a{color:var(--green)}
 @media(max-width:760px){.hero{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.toolbar{grid-template-columns:1fr 1fr}.searchbox{grid-column:1/-1}.grid{grid-template-columns:1fr}.section-head{align-items:start;flex-direction:column}}
 @media(max-width:440px){.shell{width:calc(100% - 22px)}.top-note{max-width:140px;text-align:right}.hero{padding:26px 20px;border-radius:22px}.stats{gap:8px}.stat{padding:12px}.toolbar{grid-template-columns:1fr}.searchbox{grid-column:auto}.recipe{padding:18px}.footer{flex-direction:column}}
+
+.nutrition-details{margin-top:8px;padding-top:8px;border-top:1px solid var(--line)}.nutrition-details summary{padding-top:4px}.nutrition-group{margin-top:12px}.nutrition-group h4{margin:0 0 6px;font-size:.8rem;color:var(--muted)}.nutrition-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px}.nutrition-table{width:100%;border-collapse:collapse;font-size:.78rem}.nutrition-table th,.nutrition-table td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}.nutrition-table tr:last-child th,.nutrition-table tr:last-child td{border-bottom:0}.nutrition-table td:last-child{color:var(--green);font-weight:750}.nutrition-table th{font-weight:650}.daily-note{margin:10px 0 0!important;font-size:.75rem;color:var(--muted)}.estimate{margin-top:12px!important;font-size:.76rem}
 </style>
 </head>
 <body>
 <div class="shell">
-<header class="topbar"><div class="brand"><span class="mark" aria-hidden="true">£</span><span>OMAD / GOOD FOOD, TIGHT BUDGET</span></div><div class="top-note">A simple recipe file. No database needed.</div></header>
+<header class="topbar"><div class="brand"><span class="mark" aria-hidden="true">£</span><span>OMAD / GOOD FOOD, TIGHT BUDGET</span></div><div class="top-note">Low-cost meals. Search by what is already in your cupboard.</div></header>
 <section class="hero" aria-labelledby="page-title"><div><p class="eyebrow">One meal a day, made practical</p><h1 id="page-title">Big meals.<br>Small prices.</h1><p class="hero-copy">Find a filling meal, see the rough cost and nutrition, or search by what’s already in your cupboard.</p></div><div class="stats" aria-label="Recipe summary"><div class="stat"><strong id="recipe-total">—</strong><span>recipes in the list</span></div><div class="stat"><strong id="season-label">—</strong><span>season right now</span></div></div></section>
 <main>
 <div class="section-head"><div><p class="eyebrow" style="color:var(--green);margin-bottom:6px">The recipe list</p><h2>What have you got?</h2></div><div class="season-note" id="season-note"></div></div>
@@ -32,10 +34,10 @@ main{padding:32px 0 56px}.section-head{display:flex;justify-content:space-betwee
 <div class="filterline"><label class="check"><input id="seasonal" type="checkbox"> In season now</label><span id="result-count" class="result-count" aria-live="polite"></span></div>
 <section id="recipes" class="grid" aria-live="polite" aria-label="Recipes"><div class="empty">Loading recipes…</div></section>
 </main>
-<footer class="footer"><span>Prices and nutrition are rough estimates. Check your own packet labels and store prices.</span><span>Fibre target shown as 30g/day (<a href="https://www.nhs.uk/live-well/eat-well/digestive-health/how-to-get-more-fibre-into-your-diet/" target="_blank" rel="noreferrer">NHS guidance</a>); protein target is set to 80g.</span></footer>
+<footer class="footer"><span>Prices and full nutrient breakdowns are modelled estimates from generic food values. Check your packet labels, portions and oil amounts.</span><span>Adult label reference values: <a href="https://www.legislation.gov.uk/eur/2011/1169/annex/XIII" target="_blank" rel="noreferrer">UK nutrition-label RIs/NRVs</a>. Fibre uses the <a href="https://www.nhs.uk/live-well/eat-well/digestive-health/how-to-get-more-fibre-into-your-diet/" target="_blank" rel="noreferrer">NHS 30g/day recommendation</a>. Protein shows the 50g label RI and your 80g target.</span></footer>
 </div>
 <script>
-const state={recipes:[],targets:{proteinG:80,fibreG:30},category:"all"};
+const state={recipes:[],targets:{proteinG:80,fibreG:30},referenceIntakes:{},category:"all"};
 const month=new Date().getMonth();
 const currentSeason=month===11||month<=1?"winter":month<=4?"spring":month<=7?"summer":"autumn";
 const $=function(selector){return document.querySelector(selector);};
@@ -43,9 +45,48 @@ const escapeHtml=function(value){return String(value==null?"":value).replace(/[&
 function dietLabel(recipe){const diets=recipe.dietary||[];if(diets.includes("vegan"))return "Vegan";if(diets.includes("vegetarian"))return "Vegetarian";if(diets.includes("pescatarian"))return "Pescatarian";return "Everyday";}
 function matchesDiet(recipe,selected){const diets=recipe.dietary||[];if(selected==="any")return true;if(selected==="vegetarian")return diets.includes("vegetarian")||diets.includes("vegan");return diets.includes(selected);}
 function matchesSearch(recipe,query){if(!query.trim())return true;const terms=query.toLowerCase().split(",").map(function(part){return part.trim();}).filter(Boolean);const ingredients=(recipe.ingredients||[]).map(function(item){return (item.amount||"")+" "+(item.name||item);});const haystack=[recipe.name,recipe.description].concat(recipe.tags||[],recipe.categories||[],ingredients).join(" ").toLowerCase();return terms.every(function(term){return haystack.includes(term);});}
+function pct(value,target){const amount=Number(value),goal=Number(target);return Number.isFinite(amount)&&goal>0?Math.round(amount/goal*100):null;}
+function pctText(value,target){const n=pct(value,target);return n===null?"—":n+"%";}
+function nutritionRow(label,value,unit,target,basis,extra){
+ const shown=Number.isFinite(Number(value))?Number(value)+(unit?" "+unit:""):"—";
+ return '<tr><th scope="row">'+escapeHtml(label)+'</th><td>'+escapeHtml(shown)+'</td><td>'+pctText(value,target)+' '+escapeHtml(basis)+(extra||"")+'</td></tr>';
+}
+function nutritionTable(title,rows){
+ return '<div class="nutrition-group"><h4>'+title+'</h4><div class="nutrition-table-wrap"><table class="nutrition-table"><thead><tr><th>Nutrient</th><th>Amount</th><th>Daily share</th></tr></thead><tbody>'+rows.join("")+'</tbody></table></div></div>';
+}
+function nutritionDetails(recipe){
+ const n=recipe.nutritionPerServing||{},m=n.micronutrients||{},r=state.referenceIntakes,t=state.targets;
+ const macroRows=[
+  nutritionRow("Energy",n.caloriesKcal,"kcal",r.energyKcal,"of adult RI"),
+  nutritionRow("Protein",n.proteinG,"g",r.proteinG,"of adult label RI","; "+pctText(n.proteinG,t.proteinG)+" of your "+t.proteinG+"g target"),
+  nutritionRow("Carbohydrate",n.carbohydrateG,"g",r.carbohydrateG,"of adult RI"),
+  nutritionRow("Fat",n.fatG,"g",r.fatG,"of adult RI"),
+  nutritionRow("of which saturates",n.saturatesG,"g",r.saturatesG,"of adult RI"),
+  nutritionRow("of which sugars",n.sugarsG,"g",r.sugarsG,"of adult RI"),
+  nutritionRow("Fibre",n.fibreG,"g",t.fibreG,"of NHS 30g/day"),
+  nutritionRow("Salt",n.saltG,"g",r.saltG,"of adult RI")
+ ];
+ const microRows=[
+  nutritionRow("Potassium",m.potassiumMg,"mg",r.potassiumMg,"of adult NRV"),
+  nutritionRow("Calcium",m.calciumMg,"mg",r.calciumMg,"of adult NRV"),
+  nutritionRow("Iron",m.ironMg,"mg",r.ironMg,"of adult NRV"),
+  nutritionRow("Magnesium",m.magnesiumMg,"mg",r.magnesiumMg,"of adult NRV"),
+  nutritionRow("Vitamin C",m.vitaminCMg,"mg",r.vitaminCMg,"of adult NRV"),
+  nutritionRow("Vitamin D",m.vitaminDUg,"µg",r.vitaminDUg,"of adult NRV"),
+  nutritionRow("Vitamin B12",m.vitaminB12Ug,"µg",r.vitaminB12Ug,"of adult NRV"),
+  nutritionRow("Folate",m.folateUg,"µg",r.folateUg,"of adult NRV"),
+  nutritionRow("Zinc",m.zincMg,"mg",r.zincMg,"of adult NRV")
+ ];
+ return '<details class="nutrition-details"><summary>Nutrition and daily percentages</summary><div class="detail-content">'+
+  nutritionTable("Energy and macros",macroRows)+nutritionTable("Vitamins and minerals",microRows)+
+  '<p class="daily-note">Percentages are general adult label reference values. Your protein target is shown separately; needs vary by person. Values are estimates, not a measured or medically complete diet assessment.</p></div></details>';
+}
 function recipeCard(recipe){
- const nutrition=recipe.nutritionPerServing||{};const protein=Number(nutrition.proteinG)||0;const fibre=Number(nutrition.fibreG)||0;
- const proteinPct=Math.round(protein/state.targets.proteinG*100);const fibrePct=Math.round(fibre/state.targets.fibreG*100);
+ const nutrition=recipe.nutritionPerServing||{},micro=nutrition.micronutrients||{};
+ const protein=Number(nutrition.proteinG)||0,fibre=Number(nutrition.fibreG)||0;
+ const proteinPct=pct(protein,state.targets.proteinG)||0,fibrePct=pct(fibre,state.targets.fibreG)||0;
+ const potassiumPct=pct(micro.potassiumMg,state.referenceIntakes.potassiumMg)||0;
+ const ironPct=pct(micro.ironMg,state.referenceIntakes.ironMg)||0;
  const categories=(recipe.categories||[]).map(function(item){return '<span class="badge">'+escapeHtml(item)+'</span>';}).join("");
  const special=recipe.special?'<span class="badge special">Special</span>':"";
  const ingredients=(recipe.ingredients||[]).map(function(item){return "<li>"+escapeHtml(item.amount||"")+" "+escapeHtml(item.name||item)+"</li>";}).join("");
@@ -53,11 +94,16 @@ function recipeCard(recipe){
  const produce=(recipe.seasonalProduce||[]).join(", ");const seasonalText=produce?"Seasonal produce: "+escapeHtml(produce):"Uses year-round ingredients";
  const cost=Number(recipe.costGBP);const costText=Number.isFinite(cost)?"£"+cost.toFixed(2):"Add price";
  const kcal=Number(nutrition.caloriesKcal);const kcalText=Number.isFinite(kcal)?kcal+" kcal":"— kcal";
- const proteinText=Number.isFinite(Number(nutrition.proteinG))?nutrition.proteinG+"g":"—";const fibreText=Number.isFinite(Number(nutrition.fibreG))?nutrition.fibreG+"g":"—";
+ const proteinText=Number.isFinite(protein)?protein+"g":"—";const fibreText=Number.isFinite(fibre)?fibre+"g":"—";
  return '<article class="recipe"><div class="recipe-top"><div class="badges">'+special+categories+'<span class="badge">'+escapeHtml(dietLabel(recipe))+'</span></div><div class="cost">'+costText+'<small>per meal</small></div></div>'+
  '<h3>'+escapeHtml(recipe.name)+'</h3><p>'+escapeHtml(recipe.description||"")+'</p>'+
- '<div class="metrics"><div class="metric"><strong>'+kcalText+'</strong><span>energy</span></div><div class="metric"><strong>'+proteinText+'</strong><span>protein</span></div><div class="metric"><strong>'+fibreText+'</strong><span>fibre</span></div></div>'+
- '<div class="coverage" aria-label="Share of daily targets"><div class="coverage-row"><span>Protein '+proteinPct+'% of '+state.targets.proteinG+'g</span><div class="bar"><i style="width:'+Math.min(100,proteinPct)+'%"></i></div></div><div class="coverage-row"><span>Fibre '+fibrePct+'% of '+state.targets.fibreG+'g</span><div class="bar"><i style="width:'+Math.min(100,fibrePct)+'%"></i></div></div></div>'+
+ '<div class="metrics"><div class="metric"><strong>'+kcalText+'</strong><span>energy · '+pctText(nutrition.caloriesKcal,state.referenceIntakes.energyKcal)+' RI</span></div><div class="metric"><strong>'+proteinText+'</strong><span>protein · '+proteinPct+'% of your '+state.targets.proteinG+'g target</span></div><div class="metric"><strong>'+fibreText+'</strong><span>fibre · '+fibrePct+'% of 30g</span></div></div>'+
+ '<div class="coverage" aria-label="Share of daily targets">'+
+ '<div class="coverage-row"><span>Protein '+proteinPct+'% of your goal</span><div class="bar"><i style="width:'+Math.min(100,proteinPct)+'%"></i></div></div>'+
+ '<div class="coverage-row"><span>Fibre '+fibrePct+'% of 30g</span><div class="bar"><i style="width:'+Math.min(100,fibrePct)+'%"></i></div></div>'+
+ '<div class="coverage-row"><span>Potassium '+potassiumPct+'% NRV</span><div class="bar"><i style="width:'+Math.min(100,potassiumPct)+'%"></i></div></div>'+
+ '<div class="coverage-row"><span>Iron '+ironPct+'% NRV</span><div class="bar"><i style="width:'+Math.min(100,ironPct)+'%"></i></div></div></div>'+
+ nutritionDetails(recipe)+
  '<details><summary>Ingredients and method</summary><div class="detail-content"><p>'+seasonalText+'</p><h4>Ingredients</h4><ul>'+ingredients+'</ul><h4>Method</h4><ol>'+method+'</ol><p class="estimate">'+escapeHtml(recipe.estimateNote||"Nutrition and price are estimates.")+'</p></div></details></article>';
 }
 function render(){
@@ -77,7 +123,7 @@ function render(){
 }
 document.querySelectorAll("[data-category]").forEach(function(button){button.addEventListener("click",function(){state.category=button.dataset.category;document.querySelectorAll("[data-category]").forEach(function(item){item.setAttribute("aria-pressed",String(item===button));});render();});});
 ["#search","#diet","#sort","#seasonal"].forEach(function(selector){$(selector).addEventListener("input",render);});
-fetch("./recipes.json").then(function(response){if(!response.ok)throw new Error("recipes.json did not load");return response.json();}).then(function(data){state.recipes=Array.isArray(data.recipes)?data.recipes:[];state.targets=Object.assign({},state.targets,data.dailyTargets||{});render();}).catch(function(){$("#recipes").innerHTML='<div class="load-error">Could not load recipes.json. Serve this folder through a local web server, or check that the JSON file is beside index.html.</div>';});
+fetch("./recipes.json").then(function(response){if(!response.ok)throw new Error("recipes.json did not load");return response.json();}).then(function(data){state.recipes=Array.isArray(data.recipes)?data.recipes:[];state.targets=Object.assign({},state.targets,data.dailyTargets||{});state.referenceIntakes=Object.assign({},data.dailyReferenceIntakes||{});render();}).catch(function(){$("#recipes").innerHTML='<div class="load-error">Could not load recipes.json. Serve this folder through a local web server, or check that the JSON file is beside index.html.</div>';});
 </script>
 </body>
 </html>
