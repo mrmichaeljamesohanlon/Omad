@@ -4,7 +4,8 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-DATA_PATH = ROOT / "recipes.json"
+DATA_PATH = ROOT / "recipes-v2.json"
+LEGACY_DATA_PATH = ROOT / "recipes.json"
 
 # Per 100 g: kcal, protein, fat, saturates, carbs, sugars, fibre, salt,
 # calcium mg, iron mg, potassium mg, magnesium mg, vitamin C mg, vitamin D ug,
@@ -205,7 +206,7 @@ def variants(family, proteins, vegetables, build, categories, description_fn, me
     return recipes
 
 def generate():
-    old = json.loads(DATA_PATH.read_text())
+    old = json.loads(LEGACY_DATA_PATH.read_text())
     recipes = []
     # Keep the original five favourites and extend them with fuller rough nutrient estimates.
     legacy_micro = {
@@ -223,6 +224,8 @@ def generate():
         "apple-oat-bakes": (15,3,80,28,.8),
     }
     for r in old["recipes"]:
+        if r["id"] not in legacy_macros:
+            continue
         n = r["nutritionPerServing"]
         fat, sat, carbs, sugars, salt = legacy_macros[r["id"]]
         n.update({"fatG": fat, "saturatesG": sat, "carbohydrateG": carbs,
@@ -417,8 +420,10 @@ def generate():
         ),
         "recipes": recipes
     }
-    DATA_PATH.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n")
-    print(f"Wrote {len(recipes)} recipes to {DATA_PATH}")
+    rendered = json.dumps(output, ensure_ascii=False, indent=2) + "\n"
+    DATA_PATH.write_text(rendered)
+    LEGACY_DATA_PATH.write_text(rendered)
+    print(f"Wrote {len(recipes)} recipes to {DATA_PATH} and {LEGACY_DATA_PATH}")
 
 if __name__ == "__main__":
     generate()
