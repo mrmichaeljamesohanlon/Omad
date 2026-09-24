@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "currency": "GBP",
+  "recipes": [
+    {
+      "id": "salmon-tuna-pasta",
+      "name": "Salmon and tuna pasta",
+      "status": "draft",
+      "dietary": ["pescatarian"],
+      "season": ["all-year"],
+      "tags": ["budget", "pasta"],
+      "costGBP": null,
+      "nutritionPerMeal": {
+        "caloriesKcal": null,
+        "proteinG": null,
+        "fibreG": null,
+        "dailyNutritionPct": null
+      },
+      "ingredients": [],
+      "method": [],
+      "notes": [
+        "Starter entry; add quantities, method, cost and nutrition estimates."
+      ]
+    }
+  ]
+}
