@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-DATA_PATH = ROOT / "recipes-v2.json"
+DATA_PATH = ROOT / "recipes-v3.json"
 LEGACY_DATA_PATH = ROOT / "recipes.json"
 
 # Per 100 g: kcal, protein, fat, saturates, carbs, sugars, fibre, salt,
@@ -161,10 +161,31 @@ def make_recipe(name, description, categories, dietary, ingredients, method,
     if not seasons:
         seasons = ["all-year"]
     safe_ingredients = [{"amount": i["amount"], "name": i["name"]} for i in ingredients]
+    foods = [i["food"] for i in ingredients]
+    protein, carbs, fibre, kcal = n.get("proteinG",0), n.get("carbohydrateG",0), n.get("fibreG",0), n.get("caloriesKcal",0)
+    wartime_staples = {"potatoes","oats","carrot","cabbage","onion","split peas","red lentils","wholemeal flour","wholemeal bread"}
+    wartime_luxuries = {"salmon","cheddar","pumpkin seeds","frozen berries","peanut butter"}
+    wartime_score = sum(x in wartime_staples for x in foods) - sum(x in wartime_luxuries for x in foods)
+    eras = ["modern"] + (["ww2-wartime-inspired"] if wartime_score >= 2 else [])
+    if any(x in foods for x in ("corned beef","potatoes","cabbage","baked beans")): eras += ["1950s","1970s"]
+    eras = list(dict.fromkeys(eras))
+    goals = ["everyday"]
+    if protein >= 35 and carbs >= 45 and kcal >= 550: goals.append("athlete")
+    if protein >= 45 and fibre >= 10: goals.append("bodybuilder")
+    spice_level = "hot" if "chilli powder" in foods else ("medium" if any(x in foods for x in ("curry powder","paprika")) else "mild")
+    family = {"adultMultiplier":1.0,"childMultiplier":0.65,"toddlerMultiplier":0.35,
+              "note":"Portion scaling only; child/toddler servings are family-meal portions, not an OMAD or fasting recommendation."}
+    fancy_extras = ["fresh herbs"]
+    if "pasta" in foods: fancy_extras += ["hard cheese", "mushrooms"]
+    elif any(x in foods for x in ("potatoes","cabbage","carrot")): fancy_extras += ["wholegrain mustard", "fresh parsley"]
+    elif "oats" in foods: fancy_extras += ["berries", "toasted seeds"]
     return {
         "id": slug(name), "name": name, "description": description,
         "categories": categories, "special": special, "dietary": dietary,
         "seasons": seasons, "seasonalProduce": produce,
+        "eras": eras, "goals": goals, "spiceLevel": spice_level,
+        "familyPortions": family, "fancyExtras": fancy_extras,
+        "settings": ["indoor","outdoor"], "wartimeInspired": "ww2-wartime-inspired" in eras,
         "tags": list(dict.fromkeys(["budget"] + (tags or []) +
                                    [i["food"] for i in ingredients])),
         "costGBP": cost, "nutritionPerServing": n,
@@ -409,7 +430,7 @@ def generate():
     if len(recipes) < 200:
         raise ValueError(f"Expected a few hundred recipes, got {len(recipes)}")
     output = {
-        "schemaVersion": 2,
+        "schemaVersion": 3,
         "currency": "GBP",
         "dailyTargets": DAILY_TARGETS,
         "dailyReferenceIntakes": DAILY_REFERENCE_INTAKES,
