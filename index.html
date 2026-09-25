@@ -34,6 +34,7 @@ main{padding:32px 0 56px}.section-head{display:flex;justify-content:space-betwee
 <label>Children <input id="children" type="number" min="0" max="20" value="0"></label>
 <label>Toddlers <input id="toddlers" type="number" min="0" max="20" value="0"></label>
 <button class="mini" id="qty-down" type="button">−10%</button><strong id="qty-label">100%</strong><button class="mini" id="qty-up" type="button">+10%</button>
+<label>Goal <select id="goal"><option>Everyday</option><option value="athlete">Athlete</option><option value="bodybuilder">Bodybuilder</option></select></label>
 <label>Era <select id="era"><option>Modern</option><option>1990s</option><option>1980s</option><option>1970s</option><option>1950s</option><option value="WW2 / Wartime">WW2 / Wartime</option></select></label>
 <label>Spice <select id="spice"><option>Mild</option><option selected>Medium</option><option>Hot</option></select></label>
 <label>Setting <select id="setting"><option>Indoor</option><option>Outdoor</option></select></label>
@@ -96,7 +97,8 @@ function nutritionDetails(recipe){
 }
 function mealMultiplier(){const a=Number($("#adults").value)||0,ch=Number($("#children").value)||0,t=Number($("#toddlers").value)||0;return Math.max(.1,(a+ch*.65+t*.35)*state.qty);}
 function scaledAmount(amount,m){const s=String(amount||"");const hit=s.match(/^([0-9]+(?:\.[0-9]+)?)(.*)$/);if(!hit)return s;const v=Number(hit[1])*m;return (Math.round(v*10)/10)+hit[2];}
-function adaptationNote(recipe){const era=$("#era").value,spice=$("#spice").value,setting=$("#setting").value;let bits=[];
+function adaptationNote(recipe){const goal=$("#goal").value,era=$("#era").value,spice=$("#spice").value,setting=$("#setting").value;let bits=[];
+ if(goal==="athlete")bits.push("Athlete mode: favour the higher-energy version with useful carbohydrate around training and a solid protein serving; scale the portion to training load."); else if(goal==="bodybuilder")bits.push("Bodybuilder mode: favour a larger lean-protein serving, keep vegetables and fibre high, and adjust carbohydrate/energy to the current training goal.");
  if(era==="WW2 / Wartime")bits.push("WW2-inspired: favour potatoes, oats, carrots, cabbage, onions and dried pulses; keep meat, cheese, sugar and fats modest. This is wartime-inspired, not a strict historical ration.");
  else if(era!=="Modern")bits.push(era+" style: keep the core recipe but lean toward familiar ingredients and presentation from the period.");
  if(spice==="Hot")bits.push("Spice up: add extra chilli, pepper, curry powder or mustard to suit the dish."); else if(spice==="Mild")bits.push("Keep seasoning gentle and reduce chilli/strong heat.");
@@ -151,7 +153,7 @@ function render(){
 function resetPageAndRender(){state.page=0;render();}
 function fillCuisineOptions(){const select=$("#cuisine");Array.from(new Set(state.recipes.map(function(recipe){return recipe.cuisine||"Everyday";}))).sort().forEach(function(cuisine){const option=document.createElement("option");option.value=cuisine;option.textContent=cuisine;select.appendChild(option);});}
 document.querySelectorAll("[data-category]").forEach(function(button){button.addEventListener("click",function(){state.category=button.dataset.category;state.page=0;document.querySelectorAll("[data-category]").forEach(function(item){item.setAttribute("aria-pressed",String(item===button));});render();});});
-["#search","#diet","#sort","#seasonal","#cuisine","#adults","#children","#toddlers","#era","#spice","#setting"].forEach(function(selector){$(selector).addEventListener("input",resetPageAndRender);$(selector).addEventListener("change",resetPageAndRender);});
+["#search","#diet","#sort","#seasonal","#cuisine","#goal","#adults","#children","#toddlers","#era","#spice","#setting"].forEach(function(selector){$(selector).addEventListener("input",resetPageAndRender);$(selector).addEventListener("change",resetPageAndRender);});
 $("#qty-down").addEventListener("click",function(){state.qty=Math.max(.1,Math.round((state.qty-.1)*10)/10);$("#qty-label").textContent=Math.round(state.qty*100)+"%";render();});
 $("#qty-up").addEventListener("click",function(){state.qty=Math.round((state.qty+.1)*10)/10;$("#qty-label").textContent=Math.round(state.qty*100)+"%";render();});
 $("#fancy").addEventListener("click",function(){state.fancy=!state.fancy;this.classList.toggle("on",state.fancy);this.setAttribute("aria-pressed",String(state.fancy));render();});
