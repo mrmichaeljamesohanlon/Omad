@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#173b30">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#173b30"><meta name="app-version" content="1.3">
 <title>OMAD — affordable meals that count</title>
 <style>
 :root{color-scheme:light;--ink:#18382f;--muted:#64776d;--paper:#f5f3eb;--card:#fffefa;--green:#1f5a43;--dark:#173b30;--lime:#d6e77b;--line:#e3e4d9;--shadow:0 16px 44px rgba(25,55,44,.08);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -19,7 +19,7 @@ main{padding:32px 0 56px}.section-head{display:flex;justify-content:space-betwee
 </head>
 <body>
 <div class="shell">
-<header class="topbar"><div class="brand"><span class="mark" aria-hidden="true">£</span><span>OMAD / GOOD FOOD, TIGHT BUDGET</span></div><div class="top-note">Low-cost meals. Search by what is already in your cupboard.</div></header>
+<header class="topbar"><div class="brand"><span class="mark" aria-hidden="true">£</span><span>OMAD / GOOD FOOD, TIGHT BUDGET</span></div><div class="top-note">v1.3 · Low-cost meals. Search by what is already in your cupboard.</div></header>
 <section class="hero" aria-labelledby="page-title"><div><p class="eyebrow">One meal a day, made practical</p><h1 id="page-title">Big meals.<br>Small prices.</h1><p class="hero-copy">Find a filling meal, see the rough cost and nutrition, or search by what’s already in your cupboard.</p></div><div class="stats" aria-label="Recipe summary"><div class="stat"><strong id="recipe-total">—</strong><span>recipes in the list</span></div><div class="stat"><strong id="season-label">—</strong><span>season right now</span></div></div></section>
 <main>
 <div class="section-head"><div><p class="eyebrow" style="color:var(--green);margin-bottom:6px">The recipe list</p><h2>What have you got?</h2></div><div class="season-note" id="season-note"></div></div>
@@ -34,11 +34,11 @@ main{padding:32px 0 56px}.section-head{display:flex;justify-content:space-betwee
 <label>Children <input id="children" type="number" min="0" max="20" value="0"></label>
 <label>Toddlers <input id="toddlers" type="number" min="0" max="20" value="0"></label>
 <button class="mini" id="qty-down" type="button">−10%</button><strong id="qty-label">100%</strong><button class="mini" id="qty-up" type="button">+10%</button>
-<label>Goal <select id="goal"><option>Everyday</option><option value="athlete">Athlete</option><option value="bodybuilder">Bodybuilder</option></select></label>
+<label>Goal <select id="goal"><option value="everyday">Everyday</option><option value="athlete">Athlete</option><option value="bodybuilder">Bodybuilder</option></select></label>
 <label>Era <select id="era"><option>Modern</option><option>1990s</option><option>1980s</option><option>1970s</option><option>1950s</option><option value="WW2 / Wartime">WW2 / Wartime</option></select></label>
 <label>Spice <select id="spice"><option>Mild</option><option selected>Medium</option><option>Hot</option></select></label>
 <label>Setting <select id="setting"><option>Indoor</option><option>Outdoor</option></select></label>
-<button class="mini" id="fancy" type="button" aria-pressed="false">✨ Fancy up</button>
+<button class="mini" id="fancy" type="button" aria-pressed="false">✨ Fancy up</button><button class="mini" id="budget" type="button" aria-pressed="false">£ Fancy down</button>
 </div>
 <nav class="categories" aria-label="Recipe categories">
 <button class="category" type="button" data-category="all" aria-pressed="true">All meals</button><button class="category" type="button" data-category="specials" aria-pressed="false">Specials</button><button class="category" type="button" data-category="breakfast" aria-pressed="false">Breakfast</button><button class="category" type="button" data-category="lunch" aria-pressed="false">Lunch</button><button class="category" type="button" data-category="dinner" aria-pressed="false">Dinner</button><button class="category" type="button" data-category="snacks" aria-pressed="false">Snacks</button>
@@ -50,7 +50,7 @@ main{padding:32px 0 56px}.section-head{display:flex;justify-content:space-betwee
 <footer class="footer"><span>Prices and full nutrient breakdowns are modelled estimates from generic food values. Check your packet labels, portions and oil amounts.</span><span>Adult label reference values: <a href="https://www.legislation.gov.uk/eur/2011/1169/annex/XIII" target="_blank" rel="noreferrer">UK nutrition-label RIs/NRVs</a>. Fibre uses the <a href="https://www.nhs.uk/live-well/eat-well/digestive-health/how-to-get-more-fibre-into-your-diet/" target="_blank" rel="noreferrer">NHS 30g/day recommendation</a>. Protein shows the 50g label RI and your 80g target.</span></footer>
 </div>
 <script>
-const state={qty:1,fancy:false,recipes:[],targets:{proteinG:80,fibreG:30},referenceIntakes:{},category:"all",page:0};
+const state={qty:1,fancy:false,budget:false,recipes:[],targets:{proteinG:80,fibreG:30},referenceIntakes:{},category:"all",page:0};
 const PAGE_SIZE=40;
 const month=new Date().getMonth();
 const currentSeason=month===11||month<=1?"winter":month<=4?"spring":month<=7?"summer":"autumn";
@@ -95,8 +95,11 @@ function nutritionDetails(recipe){
   nutritionTable("Energy and macros",macroRows)+nutritionTable("Vitamins and minerals",microRows)+
   '<p class="daily-note">Percentages are general adult label reference values. Your protein target is shown separately; needs vary by person. Values are estimates, not a measured or medically complete diet assessment.</p></div></details>';
 }
+function performanceFactor(){const goal=$("#goal").value;return goal==="athlete"?1.2:goal==="bodybuilder"?1.15:1;}
+function portionFactor(){return state.qty*performanceFactor();}
 function mealMultiplier(){const a=Number($("#adults").value)||0,ch=Number($("#children").value)||0,t=Number($("#toddlers").value)||0;return Math.max(.1,(a+ch*.65+t*.35)*state.qty);}
 function scaledAmount(amount,m){const s=String(amount||"");const hit=s.match(/^([0-9]+(?:\.[0-9]+)?)(.*)$/);if(!hit)return s;const v=Number(hit[1])*m;return (Math.round(v*10)/10)+hit[2];}
+function displayNutrition(recipe){const n=recipe.nutritionPerServing||{},factor=portionFactor();const out=Object.assign({},n);["caloriesKcal","proteinG","carbohydrateG","fatG","saturatesG","sugarsG","fibreG","saltG"].forEach(function(k){if(Number.isFinite(Number(n[k])))out[k]=Math.round(Number(n[k])*factor*10)/10;});out.micronutrients={};Object.keys(n.micronutrients||{}).forEach(function(k){out.micronutrients[k]=Math.round(Number(n.micronutrients[k])*factor*10)/10;});return out;}
 function adaptationNote(recipe){const goal=$("#goal").value,era=$("#era").value,spice=$("#spice").value,setting=$("#setting").value;let bits=[];
  if(goal==="athlete")bits.push("Athlete mode: favour the higher-energy version with useful carbohydrate around training and a solid protein serving; scale the portion to training load."); else if(goal==="bodybuilder")bits.push("Bodybuilder mode: favour a larger lean-protein serving, keep vegetables and fibre high, and adjust carbohydrate/energy to the current training goal.");
  if(era==="WW2 / Wartime")bits.push("WW2-inspired: favour potatoes, oats, carrots, cabbage, onions and dried pulses; keep meat, cheese, sugar and fats modest. This is wartime-inspired, not a strict historical ration.");
@@ -107,7 +110,7 @@ function adaptationNote(recipe){const goal=$("#goal").value,era=$("#era").value,
  return bits.length?'<div class="nutrition-group"><h4>Make it yours</h4><p>'+escapeHtml(bits.join(" "))+'</p></div>':"";
 }
 function recipeCard(recipe){
- const nutrition=recipe.nutritionPerServing||{},micro=nutrition.micronutrients||{};
+ const nutrition=displayNutrition(recipe),micro=nutrition.micronutrients||{};
  const protein=Number(nutrition.proteinG)||0,fibre=Number(nutrition.fibreG)||0;
  const proteinPct=pct(protein,state.targets.proteinG)||0,fibrePct=pct(fibre,state.targets.fibreG)||0;
  const potassiumPct=pct(micro.potassiumMg,state.referenceIntakes.potassiumMg)||0;
@@ -115,10 +118,10 @@ function recipeCard(recipe){
  const categories=(recipe.categories||[]).map(function(item){return '<span class="badge">'+escapeHtml(item)+'</span>';}).join("");
  const special=recipe.special?'<span class="badge special">Special</span>':"";
  const cuisine='<span class="badge">'+escapeHtml(recipe.cuisine||"Everyday")+'</span>';
- const mult=mealMultiplier();const ingredients=(recipe.ingredients||[]).map(function(item){return "<li>"+escapeHtml(scaledAmount(item.amount||"",mult))+" "+escapeHtml(item.name||item)+"</li>";}).join("");
+ const mult=mealMultiplier()*performanceFactor();const ingredients=(recipe.ingredients||[]).map(function(item){return "<li>"+escapeHtml(scaledAmount(item.amount||"",mult))+" "+escapeHtml(item.name||item)+"</li>";}).join("");
  const method=(recipe.method||[]).map(function(step){return "<li>"+escapeHtml(step)+"</li>";}).join("");
  const produce=(recipe.seasonalProduce||[]).join(", ");const seasonalText=produce?"Seasonal produce: "+escapeHtml(produce):"Uses year-round ingredients";
- const cost=Number(recipe.costGBP);const costText=Number.isFinite(cost)?"£"+(cost*mult).toFixed(2):"Add price";
+ const cost=Number(recipe.costGBP);const budgetFactor=state.budget?.9:1;const fancyFactor=state.fancy?1.12:1;const costText=Number.isFinite(cost)?"£"+(cost*mult*budgetFactor*fancyFactor).toFixed(2):"Add price";
  const kcal=Number(nutrition.caloriesKcal);const kcalText=Number.isFinite(kcal)?kcal+" kcal":"— kcal";
  const proteinText=Number.isFinite(protein)?protein+"g":"—";const fibreText=Number.isFinite(fibre)?fibre+"g":"—";
  return '<article class="recipe"><div class="recipe-top"><div class="badges">'+special+categories+cuisine+'<span class="badge">'+escapeHtml(dietLabel(recipe))+'</span></div><div class="cost">'+costText+'<small>per meal</small></div></div>'+
@@ -156,7 +159,8 @@ document.querySelectorAll("[data-category]").forEach(function(button){button.add
 ["#search","#diet","#sort","#seasonal","#cuisine","#goal","#adults","#children","#toddlers","#era","#spice","#setting"].forEach(function(selector){$(selector).addEventListener("input",resetPageAndRender);$(selector).addEventListener("change",resetPageAndRender);});
 $("#qty-down").addEventListener("click",function(){state.qty=Math.max(.1,Math.round((state.qty-.1)*10)/10);$("#qty-label").textContent=Math.round(state.qty*100)+"%";render();});
 $("#qty-up").addEventListener("click",function(){state.qty=Math.round((state.qty+.1)*10)/10;$("#qty-label").textContent=Math.round(state.qty*100)+"%";render();});
-$("#fancy").addEventListener("click",function(){state.fancy=!state.fancy;this.classList.toggle("on",state.fancy);this.setAttribute("aria-pressed",String(state.fancy));render();});
+$("#fancy").addEventListener("click",function(){state.fancy=!state.fancy;if(state.fancy){state.budget=false;$("#budget").classList.remove("on");$("#budget").setAttribute("aria-pressed","false");}this.classList.toggle("on",state.fancy);this.setAttribute("aria-pressed",String(state.fancy));render();});
+$("#budget").addEventListener("click",function(){state.budget=!state.budget;if(state.budget){state.fancy=false;$("#fancy").classList.remove("on");$("#fancy").setAttribute("aria-pressed","false");}this.classList.toggle("on",state.budget);this.setAttribute("aria-pressed",String(state.budget));render();});
 $("#load-more").addEventListener("click",function(){state.page+=1;render();});
 fetch("./recipes-v3.json").then(function(response){if(!response.ok)throw new Error("recipes-v3.json did not load");return response.json();}).then(function(data){state.recipes=Array.isArray(data.recipes)?data.recipes:[];state.targets=Object.assign({},state.targets,data.dailyTargets||{});state.referenceIntakes=Object.assign({},data.dailyReferenceIntakes||{});fillCuisineOptions();render();}).catch(function(){$("#recipes").innerHTML='<div class="load-error">Could not load recipes-v3.json. Serve this folder through a local web server, or check that the JSON file is beside index.html.</div>';});
 </script>
