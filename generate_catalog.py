@@ -441,7 +441,7 @@ def generate():
         ),
         "recipes": recipes
     }
-    rendered = json.dumps(output, ensure_ascii=False, indent=2) + "\n"
+    rendered = json.dumps(output, ensure_ascii=False, separators=(",", ":")) + "\n"
     DATA_PATH.write_text(rendered)
     LEGACY_DATA_PATH.write_text(rendered)
     print(f"Wrote {len(recipes)} recipes to {DATA_PATH} and {LEGACY_DATA_PATH}")
