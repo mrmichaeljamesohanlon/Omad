@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate recipe catalogue
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("recipes-v3.json")
+          d=json.loads(p.read_text())
+          assert d.get("schemaVersion")==3
+          recipes=d.get("recipes",[])
+          assert len(recipes)>=200
+          ids=[r["id"] for r in recipes]
+          assert len(ids)==len(set(ids)), "duplicate recipe ids"
+          enriched=[r for r in recipes if all(k in r for k in ("goals","eras","wartimeInspired"))]
+          assert len(enriched)>=200, f"only {len(enriched)} enriched recipes"
+          for r in recipes:
+              assert isinstance(r.get("costGBP"),(int,float)) and r["costGBP"]>=0
+              assert r.get("nutritionPerServing")
+          print(f"Validated {len(recipes)} recipes; {len(enriched)} enriched.")
+          PY
+
+      - name: Regenerate catalogue
+        run: python generate_catalog.py
+
+      - name: Ensure generated catalogue is committed
+        run: git diff --exit-code -- recipes-v3.json recipes.json
+
+      - name: Smoke-check web app
+        run: |
+          grep -q 'recipes-v3.json' index.html
+          grep -q 'app-version' index.html
+
+  terraform:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infrastructure
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - run: terraform fmt -check
+      - run: terraform init -backend=false
+      - run: terraform validate
